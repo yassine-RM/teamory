@@ -3,13 +3,16 @@ package org.teamory.backend.Services;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.teamory.backend.DTOs.Requests.Create.CreateUserDTO;
+import org.teamory.backend.DTOs.Responses.UserResponseDTO;
 import org.teamory.backend.Entities.User;
+import org.teamory.backend.Mappers.UserMapper;
 import org.teamory.backend.Repositories.UserRepository;
-import org.teamory.backend.Services.Interfaces.UserInterface;
+import org.teamory.backend.Services.Contracts.UserInterface;
 
-import java.util.List;
 
 @Service
 @Data
@@ -17,26 +20,34 @@ import java.util.List;
 public class UserService implements UserInterface {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
 
     @Override
-    public User getUserById(String id) {
-        return userRepository.findById(id).orElse(null);
+    public UserResponseDTO getUserById(String id) {
+        User user =  userRepository.findById(id).orElse(null);
+        return userMapper.toDTO(user);
     }
 
     @Override
-    public User getUserByUsername(String username) {
-        return null;
+    public UserResponseDTO getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        return userMapper.toDTO(user);
     }
 
     @Override
-    public List<User> getAllUsers() {
-        return List.of();
+    public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
+        Page<User> usersPage = userRepository.findAll(pageable);
+        // return usersPage.map(user -> userMapper.toDTO(user));
+        return usersPage.map(userMapper::toDTO);
     }
 
-    @Override
-    public void createIUser(User user) {
 
+    @Override
+    public UserResponseDTO createUser(CreateUserDTO userDTO) {
+        User user = userMapper.toEntity(userDTO);
+        User savedUser = userRepository.save(user);
+        return userMapper.toDTO(savedUser);
     }
 
     @Override

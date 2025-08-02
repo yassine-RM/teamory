@@ -1,4 +1,4 @@
-package org.teamory.backend.Services.Interfaces;
+package org.teamory.backend.Services.Contracts;
 
 import org.teamory.backend.Entities.Task;
 import org.teamory.backend.Entities.Team;

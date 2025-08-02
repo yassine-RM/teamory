@@ -56,13 +56,8 @@ services:
   backend:
     build: ./backend
     container_name: teamory_backend
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://springboot_postgres:5432/teamory
-      SPRING_DATASOURCE_USERNAME: yassine
-      SPRING_DATASOURCE_PASSWORD: yassine12345
-      SERVER_PORT: 8081
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/teamory
+    env_file:
+      - ./backend/.env
     volumes:
       - ./backend:/app  # <-- Sync code
       - ./mvn-repo:/root/.m2  # Optional: persist maven cache for faster builds

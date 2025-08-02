@@ -1,7 +1,6 @@
-package org.teamory.backend.Services.Interfaces;
+package org.teamory.backend.Services.Contracts;
 
 import org.teamory.backend.Entities.Task;
-import org.teamory.backend.Entities.User;
 
 import java.util.List;
 import java.util.UUID;

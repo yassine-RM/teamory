@@ -1,14 +1,15 @@
 package org.teamory.backend.Controllers;
 
 
+import jakarta.validation.Valid;
 import lombok.Data;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.teamory.backend.Entities.User;
-import org.teamory.backend.Services.Interfaces.UserInterface;
+import org.springframework.web.bind.annotation.*;
+import org.teamory.backend.DTOs.Requests.Create.CreateUserDTO;
+import org.teamory.backend.DTOs.Responses.UserResponseDTO;
+import org.teamory.backend.Services.Contracts.UserInterface;
 
 @RestController
 @RequestMapping("/api/users")
@@ -17,10 +18,22 @@ public class UserController {
 
     private final UserInterface userService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable String id) {
-        User user = userService.getUserById(id);
-        return ResponseEntity.ok(user);
+    @GetMapping
+    public ResponseEntity<Page<UserResponseDTO>> all(Pageable pageable){
+        Page<UserResponseDTO> users =  userService.getAllUsers(pageable);
+        return ResponseEntity.ok(users);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> show(@PathVariable String id) {
+        UserResponseDTO userDto = userService.getUserById(id);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PostMapping
+    public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody CreateUserDTO userDTO){
+        return ResponseEntity.ok(userService.createUser(userDTO));
+    }
+
 }
 
