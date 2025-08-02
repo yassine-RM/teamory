@@ -8,8 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.teamory.backend.DTOs.Requests.Create.CreateUserDTO;
+import org.teamory.backend.DTOs.Requests.Update.UpdateUserDTO;
 import org.teamory.backend.DTOs.Responses.UserResponseDTO;
 import org.teamory.backend.Services.Contracts.UserInterface;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
@@ -25,15 +28,36 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> show(@PathVariable String id) {
+    public ResponseEntity<UserResponseDTO> show(@PathVariable UUID id) {
         UserResponseDTO userDto = userService.getUserById(id);
+
+        if (userDto == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(userDto);
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody CreateUserDTO userDTO){
+    public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid CreateUserDTO userDTO){
         return ResponseEntity.ok(userService.createUser(userDTO));
     }
 
-}
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponseDTO> update(
+            @PathVariable UUID id,
+            @RequestBody @Valid UpdateUserDTO userDTO
+    ){
 
+        UserResponseDTO user = userService.updateUser(id, userDTO);
+        return ResponseEntity.ok(user);
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable UUID id){
+        userService.deleteUser(id);
+
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
+}
