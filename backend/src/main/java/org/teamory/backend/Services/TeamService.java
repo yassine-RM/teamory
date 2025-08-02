@@ -7,26 +7,37 @@ import lombok.Data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.teamory.backend.DTOs.Requests.Create.CreateTeamDTO;
 import org.teamory.backend.DTOs.Requests.Update.UpdateTeamDTO;
+import org.teamory.backend.DTOs.Responses.TaskResponseDTO;
 import org.teamory.backend.DTOs.Responses.TeamResponseDTO;
+import org.teamory.backend.DTOs.Responses.UserResponseDTO;
 import org.teamory.backend.Entities.Task;
 import org.teamory.backend.Entities.Team;
+import org.teamory.backend.Entities.User;
+import org.teamory.backend.Mappers.TaskMapper;
 import org.teamory.backend.Mappers.TeamMapper;
+import org.teamory.backend.Mappers.UserMapper;
+import org.teamory.backend.Repositories.TaskRepository;
 import org.teamory.backend.Repositories.TeamRepository;
+import org.teamory.backend.Repositories.UserRepository;
 import org.teamory.backend.Services.Contracts.TeamInterface;
 
-import java.util.List;
 import java.util.UUID;
 
-
+@Transactional
 @Service
 @Data
 @AllArgsConstructor
 public class TeamService implements TeamInterface {
 
     private final TeamRepository teamRepository;
+    private final UserRepository userRepository;
+    private final TaskRepository taskRepository;
     private final TeamMapper teamMapper;
+    private final TaskMapper taskMapper;
+    private final UserMapper userMapper;
 
 
     @Override
@@ -73,22 +84,42 @@ public class TeamService implements TeamInterface {
     }
 
     @Override
-    public void addMemberToTeam(String teamId, String userId) {
+    public void addMemberToTeam(UUID teamId, UUID userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new EntityNotFoundException("User not found with id: " + userId));
+
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(()-> new EntityNotFoundException("Team not found with id: " + teamId));
+
+        team.getMembers().add(user);
 
     }
 
     @Override
-    public void removeMemberFromTeam(String teamId, String userId) {
+    public void removeMemberFromTeam(UUID teamId, UUID userId) {
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(()-> new EntityNotFoundException("Team not found with id: " + teamId));
+
+        team.getMembers().removeIf(member -> member.getId().equals(userId));
 
     }
 
     @Override
-    public List<Team> getTeamMembers(String teamId) {
-        return List.of();
+    public Page<UserResponseDTO> getTeamMembers(UUID teamId, Pageable pageable) {
+        if (!teamRepository.existsById(teamId)) {
+            throw new EntityNotFoundException("Team not found with id: " + teamId);
+        }
+
+        Page<User> members = userRepository.findAllByTeamId(teamId, pageable);
+        return members.map(userMapper::toDTO);
     }
 
+
+
     @Override
-    public List<Task> getTeamTasks(String teamId) {
-        return List.of();
+    public Page<TaskResponseDTO> getTeamTasks(UUID teamId, Pageable pageable) {
+        Page<Task> tasks =  taskRepository.findByTeamId(teamId, pageable);
+        return tasks.map(taskMapper::toDTO);
     }
 }
