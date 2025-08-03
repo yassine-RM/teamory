@@ -9,6 +9,7 @@ import org.teamory.backend.Enums.TaskStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -35,5 +36,9 @@ public class Task {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assigned_to")
     private User assignedTo;
+
+    @OneToMany
+    @JoinColumn(name = "task_id")
+    private List<Comment> comments;
 
 }

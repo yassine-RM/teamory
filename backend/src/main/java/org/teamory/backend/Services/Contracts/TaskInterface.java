@@ -1,17 +1,20 @@
 package org.teamory.backend.Services.Contracts;
 
-import org.teamory.backend.Entities.Task;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.teamory.backend.DTOs.Requests.Create.CreateTaskDTO;
+import org.teamory.backend.DTOs.Requests.Update.UpdateTaskDTO;
+import org.teamory.backend.DTOs.Responses.TaskResponseDTO;
 import java.util.UUID;
 
 public interface TaskInterface {
 
-    public Task getTaskById(UUID taskId);
-    public Task updateTask(Task task);
-    public List<Task> getAllTasks();
-    public void createTask(Task task);
-    public void assignTaskToUser(String taskId, String userId);
-    public void unassignTaskToUser(String taskId, String userId);
-    public void deleteTask(String taskId);
+    public TaskResponseDTO getTaskById(UUID taskId);
+    TaskResponseDTO updateTask(UUID taskId, UpdateTaskDTO taskDto);
+    public TaskResponseDTO createTask(CreateTaskDTO taskDto);
+    public Boolean deleteTask(UUID taskId);
+
+    public Page<TaskResponseDTO> getAllTasks(Pageable pageable);
+    public String assignTaskToMember(UUID taskId, UUID userId);
+    public String unAssignTaskToMember(UUID taskId, UUID userId);
 }
