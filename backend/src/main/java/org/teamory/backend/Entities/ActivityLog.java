@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.teamory.backend.Enums.ActivityLogType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -19,12 +20,18 @@ public class ActivityLog {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String action;
+    @Enumerated(EnumType.STRING)
+    private ActivityLogType action;
+
     private String details;
     private LocalDateTime timestamp;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User actor;
+    @JoinColumn(name = "performed_by_id")
+    private User performedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "related_task_id")
+    private Task relatedTask;
 
 }

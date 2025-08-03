@@ -2,6 +2,7 @@ package org.teamory.backend.Controllers;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @Data
 @CrossOrigin(origins = "*")
 @Tag(name = "Task Management", description = "APIs for managing tasks")
+@SecurityRequirement(name = "bearerAuth")
 public class TaskController {
 
     private final TaskInterface taskService;

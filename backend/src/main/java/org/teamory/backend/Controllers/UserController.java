@@ -2,6 +2,7 @@ package org.teamory.backend.Controllers;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.Data;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @Data
 @CrossOrigin(origins = "*")
 @Tag(name = "User Management", description = "APIs for managing users")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserInterface userService;

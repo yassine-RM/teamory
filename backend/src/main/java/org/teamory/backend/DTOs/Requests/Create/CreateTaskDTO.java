@@ -18,6 +18,4 @@ public class CreateTaskDTO {
     private TaskStatus status;
     @NotNull
     private LocalDate dueDate;
-    @NotNull
-    private LocalDateTime createdAt;
 }
