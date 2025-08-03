@@ -10,7 +10,6 @@ public class CommentMapper {
 
     public CreateCommentDTO toDTO(Comment comment) {
         CreateCommentDTO dto = new CreateCommentDTO();
-        dto.setId(comment.getId());
         dto.setContent(comment.getContent());
         dto.setCreatedAt(comment.getCreatedAt());
         return dto;
@@ -18,7 +17,6 @@ public class CommentMapper {
 
     public Comment toEntity(CreateCommentDTO dto) {
         Comment comment = new Comment();
-        comment.setId(dto.getId());
         comment.setContent(dto.getContent());
         comment.setCreatedAt(dto.getCreatedAt());
         return comment;
