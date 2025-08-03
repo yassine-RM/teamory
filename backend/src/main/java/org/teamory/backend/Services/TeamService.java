@@ -92,18 +92,34 @@ public class TeamService implements TeamInterface {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(()-> new EntityNotFoundException("Team not found with id: " + teamId));
 
+        if (team.getMembers().contains(user)) {
+            throw new IllegalArgumentException("User is already a member of the team.");
+        }
+
         team.getMembers().add(user);
 
     }
 
-    @Override
-    public void removeMemberFromTeam(UUID teamId, UUID userId) {
-        Team team = teamRepository.findById(teamId)
-                .orElseThrow(()-> new EntityNotFoundException("Team not found with id: " + teamId));
+        @Override
+        public void removeMemberFromTeam(UUID teamId, UUID userId) {
+            Team team = teamRepository.findById(teamId)
+                    .orElseThrow(() -> new EntityNotFoundException("Team not found with id: " + teamId));
 
-        team.getMembers().removeIf(member -> member.getId().equals(userId));
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 
-    }
+            if (!team.getMembers().contains(user)) {
+                throw new IllegalArgumentException("User is not a member of the team.");
+            }
+
+            // Update both sides
+            team.getMembers().remove(user);
+            user.getTeams().remove(team);
+
+            // Save the owning side
+            userRepository.save(user);
+        }
+
 
     @Override
     public Page<UserResponseDTO> getTeamMembers(UUID teamId, Pageable pageable) {
