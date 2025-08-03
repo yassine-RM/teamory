@@ -4,16 +4,15 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.teamory.backend.Enums.TaskStatus;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Data
 public class UpdateTaskDTO {
 
-    @NotNull
     private String name;
-
-    @NotNull
     private String description;
-
-    @NotNull
     private TaskStatus status;
+    private LocalDate dueDate;
 
 }

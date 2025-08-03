@@ -15,5 +15,5 @@ import java.util.UUID;
 
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
 
-    Page<CommentResponseDTO> findByTaskId(UUID taskId, Pageable pageable);
+    Page<Comment> findByTaskId(UUID taskId, Pageable pageable);
 }

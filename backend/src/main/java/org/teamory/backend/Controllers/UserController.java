@@ -43,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @Operation(summary = "Get user by username", description = "Returns user by username")
+    @Operation(summary = "Create user", description = "Create a new user")
     @PostMapping
     public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid CreateUserDTO userDTO){
         return ResponseEntity.ok(userService.createUser(userDTO));

@@ -19,13 +19,18 @@ public class TeamMapper {
 
     public Team toEntity(CreateTeamDTO dto) {
         Team team = new Team();
+
         team.setName(dto.getName());
         team.setDescription(dto.getDescription());
+
         return team;
     }
 
     public void updateEntityFromDTO(Team team, UpdateTeamDTO dto) {
-        team.setName(dto.getName());
-        team.setDescription(dto.getDescription()    );
+        if (dto.getName() != null)
+            team.setName(dto.getName());
+
+        if (dto.getDescription() != null)
+            team.setDescription(dto.getDescription());
     }
 }

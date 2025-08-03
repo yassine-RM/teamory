@@ -8,6 +8,5 @@ import java.time.LocalDateTime;
 @Data
 public class UpdateCommentDTO {
 
-    @NotNull
     private String content;
 }

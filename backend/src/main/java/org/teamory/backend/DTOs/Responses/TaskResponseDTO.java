@@ -14,6 +14,5 @@ public class TaskResponseDTO {
     private String name;
     private String description;
     private TaskStatus status;
-    private LocalDate dueDate;
-    private LocalDateTime createdAt;
+    private UserResponseDTO assignedTo;
 }

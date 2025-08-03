@@ -79,11 +79,12 @@ public class TaskService implements TaskInterface {
         User user = userRepository.findById(userId)
                 .orElseThrow( () -> new EntityNotFoundException("User not found with id: " + userId));
 
-        if (task.getAssignedTo().getId().equals(userId)) {
+        if (task.getAssignedTo() != null && task.getAssignedTo().getId().equals(userId)) {
             throw new IllegalArgumentException("The task is already assigned to the user.");
         }
 
-        user.getTasks().add(task);
+
+        task.setAssignedTo(user);
 
         return "The task "+taskId+" has been assigned to the user "+userId;
     }

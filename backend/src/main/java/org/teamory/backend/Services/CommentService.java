@@ -58,16 +58,17 @@ public class CommentService implements CommentInterface {
 
     @Override
     public Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Pageable pageable) {
-        return commentRepository.findByTaskId(taskId, pageable);
+        Page<Comment> commentPage =  commentRepository.findByTaskId(taskId, pageable);
+        return commentPage.map(commentMapper::toDTO);
     }
 
     @Override
-    public void deleteCommentFromTask(UUID taskId, UUID commentId) {
-
+    public Boolean deleteCommentFromTask(UUID taskId, UUID commentId) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow( () -> new EntityNotFoundException("Task not found with id: " + taskId));
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id: " + taskId));
+
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow( () -> new EntityNotFoundException("Comment not found with id: " + commentId));
+                .orElseThrow(() -> new EntityNotFoundException("Comment not found with id: " + commentId));
 
         if (!comment.getTask().getId().equals(taskId)) {
             throw new IllegalArgumentException("The comment is not associated with the task.");
@@ -75,7 +76,11 @@ public class CommentService implements CommentInterface {
 
         task.getComments().remove(comment);
 
+        commentRepository.delete(comment);
+
+        return true;
     }
+
 
     @Override
     public CommentResponseDTO updateComment(UUID commentId, UpdateCommentDTO commentDTO) {

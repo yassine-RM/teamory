@@ -7,10 +7,7 @@ import lombok.Data;
 @Data
 public class UpdateTeamDTO {
 
-    @NotNull
     private String name;
-
-    @NotNull
     private String description;
 
 }

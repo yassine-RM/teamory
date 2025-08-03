@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import org.teamory.backend.DTOs.Requests.Create.CreateActivityLogDTO;
 import org.teamory.backend.Entities.ActivityLog;
 
+import java.time.LocalDateTime;
+
 @Component
 public class ActivityLogMapper {
 
@@ -12,7 +14,6 @@ public class ActivityLogMapper {
         CreateActivityLogDTO dto = new CreateActivityLogDTO();
         dto.setAction(log.getAction());
         dto.setDetails(log.getDetails());
-        dto.setTimestamp(log.getTimestamp());
 
         return dto;
     }
@@ -21,7 +22,7 @@ public class ActivityLogMapper {
         ActivityLog log = new ActivityLog();
         log.setAction(dto.getAction());
         log.setDetails(dto.getDetails());
-        log.setTimestamp(dto.getTimestamp());
+        log.setTimestamp(LocalDateTime.now());
 
         return log;
     }

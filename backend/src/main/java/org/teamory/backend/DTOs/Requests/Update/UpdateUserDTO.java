@@ -11,10 +11,7 @@ import java.util.UUID;
 @Data
 public class UpdateUserDTO {
 
-    @NotNull
     private String fullName;
-
-    @Email
     private String email;
 
 }

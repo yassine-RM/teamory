@@ -15,7 +15,7 @@ public interface CommentInterface {
 
     public CommentResponseDTO addCommentToTask(UUID taskId, UUID userId, CreateCommentDTO commentDTO);
     public Page<CommentResponseDTO> getCommentsByTaskId(UUID taskId, Pageable pageable);
-    public void deleteCommentFromTask(UUID taskId, UUID commentId);
+    public Boolean deleteCommentFromTask(UUID taskId, UUID commentId);
     public CommentResponseDTO updateComment(UUID commentId, UpdateCommentDTO commentDTO);
     public CommentResponseDTO getCommentById(UUID commentId);
 }

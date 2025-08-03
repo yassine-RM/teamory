@@ -1,8 +1,10 @@
 package org.teamory.backend.Exceptions;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -40,6 +42,37 @@ public class GlobalExceptionHandler {
         error.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        Throwable cause = ex.getCause();
+
+        if (cause instanceof InvalidFormatException invalidFormatException) {
+            // Check if it's an enum deserialization error
+            if (invalidFormatException.getTargetType().isEnum()) {
+                String invalidValue = invalidFormatException.getValue().toString();
+                String enumValues = String.join(", ",
+                        java.util.Arrays.stream(invalidFormatException.getTargetType().getEnumConstants())
+                                .map(Object::toString)
+                                .toList()
+                );
+
+                String message = String.format(
+                        "Invalid value '%s' for enum %s. Allowed values are: [%s]",
+                        invalidValue,
+                        invalidFormatException.getTargetType().getSimpleName(),
+                        enumValues
+                );
+
+                return ResponseEntity.badRequest().body(message);
+            }
+        }
+
+        // Fallback generic error message
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("Malformed JSON request: " + ex.getMessage());
+    }
+
 }
 
 

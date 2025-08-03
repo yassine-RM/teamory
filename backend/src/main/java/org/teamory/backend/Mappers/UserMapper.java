@@ -21,15 +21,21 @@ public class UserMapper {
 
     public User toEntity(CreateUserDTO dto) {
         User user = new User();
+
         user.setUsername(dto.getUsername());
         user.setFullName(dto.getFullName());
         user.setEmail(dto.getEmail());
+
         return user;
     }
 
     public void updateEntityFromDTO(User user, UpdateUserDTO dto) {
-        user.setFullName(dto.getFullName());
-        user.setEmail(dto.getEmail());
+
+        if (dto.getFullName() != null)
+            user.setFullName(dto.getFullName());
+
+        if (dto.getEmail() != null)
+            user.setEmail(dto.getEmail());
     }
 }
 

@@ -11,4 +11,5 @@ public class CommentResponseDTO {
     private UUID id;
     private String content;
     private LocalDateTime createdAt;
+    private UserResponseDTO author;
 }
