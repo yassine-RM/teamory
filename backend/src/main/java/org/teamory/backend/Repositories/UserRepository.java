@@ -18,4 +18,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     @Query("SELECT u FROM User u JOIN u.teams t WHERE t.id = :teamId")
     Page<User> findAllByTeamId(@Param("teamId") UUID teamId, Pageable pageable);
+
+    Optional<User> findByKeycloakId(String keycloakId);
+
 }

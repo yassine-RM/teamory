@@ -6,6 +6,7 @@ import org.teamory.backend.Enums.TaskStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class UpdateTaskDTO {
@@ -14,5 +15,6 @@ public class UpdateTaskDTO {
     private String description;
     private TaskStatus status;
     private LocalDate dueDate;
+    private UUID assignedTo;
 
 }

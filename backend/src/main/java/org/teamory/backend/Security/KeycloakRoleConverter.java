@@ -19,7 +19,7 @@ public class KeycloakRoleConverter implements Converter<Jwt, Collection<GrantedA
         if (realmAccess != null && realmAccess.containsKey("roles")) {
             List<String> roles = (List<String>) realmAccess.get("roles");
             for (String role : roles) {
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + role));
+                authorities.add(new SimpleGrantedAuthority(role));
             }
         }
 

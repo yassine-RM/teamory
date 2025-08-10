@@ -8,6 +8,8 @@ import org.teamory.backend.DTOs.Responses.TaskResponseDTO;
 import org.teamory.backend.DTOs.Responses.UserResponseDTO;
 import org.teamory.backend.Entities.Task;
 import org.teamory.backend.Entities.Task;
+import org.teamory.backend.Entities.User;
+import org.teamory.backend.Repositories.UserRepository;
 
 import java.time.LocalDateTime;
 
@@ -15,9 +17,11 @@ import java.time.LocalDateTime;
 public class TaskMapper {
 
     private final UserMapper userMapper;
+    private final UserRepository userRepository;
 
-    public TaskMapper(UserMapper userMapper) {
+    public TaskMapper(UserMapper userMapper, UserRepository userRepository) {
         this.userMapper = userMapper;
+        this.userRepository = userRepository;
     }
 
 
@@ -63,6 +67,11 @@ public class TaskMapper {
 
         if (dto.getDueDate() != null )
             task.setDueDate(dto.getDueDate());
-        
+
+        if (dto.getAssignedTo() != null ){
+            User user = userRepository.findById(dto.getAssignedTo()).orElseThrow( () -> new IllegalArgumentException("User not found with id: " + dto.getAssignedTo()));
+            task.setAssignedTo(user);
+        }
+
     }
 }
